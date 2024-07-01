@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 // components
 import Navbar from "../../components/Navbar";
-import PasswordInput from "../../components/input/PasswordInput";
+import PasswordInput from "../../components/Input/PasswordInput";
 // Utils
 import { validateEmail } from "../../utils/helper";
 
