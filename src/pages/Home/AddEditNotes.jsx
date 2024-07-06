@@ -1,6 +1,7 @@
 import React from "react";
+import { IoMdClose } from "react-icons/io";
 
-const AddEditNotes = () => {
+const AddEditNotes = ({setOpenAddEditModal}) => {
   return (
     <div>
       <div className="flex flex-col gap-2">
