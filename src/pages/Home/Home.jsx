@@ -49,11 +49,10 @@ const Home = () => {
           },
         }}
         contentLabel=""
-        className="w-[40%] max-w-3/4 bg-white rounded-md mx-auto mt-14 p-5 overflow-scroll"
+        className="w-[40%] max-w-3/4 bg-white rounded-md mx-auto mt-14 p-5"
       >
-        <IoMdClose className="absolute right-7 top-7 text-[20px] cursor-pointer text-slate-400 hover:text-slate-500 transition-all delay-200" onClick={() => setOpenAddEditModal({isShown:false})}/>
 
-        <AddEditNotes />
+        <AddEditNotes openAddEditModal={openAddEditModal} setOpenAddEditModal={setOpenAddEditModal}/>
       </Modal>
     </>
   );
