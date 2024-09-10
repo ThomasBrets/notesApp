@@ -6,11 +6,11 @@ dotenv.config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const db = require("./db/db");
+const db = require("./config/db");
 
-// jwt
-const jwt = require('jsonwebtoken');
-const { authenticateToken } = require("./utils");
+const routes = require("./routes")
+
+
 
 // Middlewares
 app.use(express.json());
@@ -20,12 +20,18 @@ app.use(
   })
 );
 
-// First route
+// Rutas
+app.use("/api", routes);
+
 app.get("/", (req, res) => {
-  res.json({ data: "hello" });
+  res.send("funciona");
 });
 
-// Server
-app.listen(3000, () => {});
+// Servidor
+const port = process.env.PORT || 3001;
+
+app.listen(port, () => {
+  console.log(`Server on ${port}`);
+});
 
 module.exports = app;

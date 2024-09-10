@@ -8,7 +8,7 @@ dotenv.config()
 
 // db
 const connectionString = process.env.MONGODB_URI;
-console.log("CONECTION", connectionString);
+// console.log("CONECTION", connectionString);
 
 
 
