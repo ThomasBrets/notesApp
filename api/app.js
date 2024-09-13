@@ -1,6 +1,16 @@
+// .env
+const dotenv = require("dotenv");
+dotenv.config();
+
+// require
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const db = require("./config/db");
+
+const routes = require("./routes")
+
+
 
 // Middlewares
 app.use(express.json());
@@ -10,12 +20,18 @@ app.use(
   })
 );
 
+// Rutas
+app.use("/api", routes);
+
 app.get("/", (req, res) => {
-    res.json({data:"hello"})
-})
+  res.send("funciona");
+});
 
-app.listen(3000, () => {
+// Servidor
+const port = process.env.PORT || 3001;
 
-})
+app.listen(port, () => {
+  console.log(`Server on ${port}`);
+});
 
-module.exports = app
+module.exports = app;
