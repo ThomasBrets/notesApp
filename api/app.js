@@ -7,6 +7,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const db = require("./config/db");
+const cookieParser = require('cookie-parser'); // Importar cookie-parser
 
 const routes = require("./routes")
 
@@ -14,6 +15,7 @@ const routes = require("./routes")
 
 // Middlewares
 app.use(express.json());
+app.use(cookieParser()); // Usar cookie-parser para manejar cookies
 app.use(
   cors({
     origin: "*",

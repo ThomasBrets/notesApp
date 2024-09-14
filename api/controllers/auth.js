@@ -1,6 +1,6 @@
 const AuthService = require("../services/auth");
 const User = require("../models/user");
-const {generateToken} = require("../config/token")
+const { generateToken } = require("../config/token");
 
 class AuthController {
   static async createUser(req, res) {
@@ -43,7 +43,17 @@ class AuthController {
   }
   static async logoutUser(req, res) {
     res.clearCookie("token");
-    res.sendStatus(204)
+    res.sendStatus(204);
+  }
+
+  static async secret(req, res) {
+    res.send(req.user)
+  }
+
+  static async findMyUser(req, res) {
+    console.log("USER", req.user);
+    res.send(req.user)
+    
   }
 }
 
