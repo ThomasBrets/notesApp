@@ -51,6 +51,7 @@ class AuthController {
   }
 
   static async findMyUser(req, res) {
+    console.log("Cookies: ", req.cookies); // Verificar si la cookie llega
     console.log("USER", req.user);
     res.send(req.user)
     
