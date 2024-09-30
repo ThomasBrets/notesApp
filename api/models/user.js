@@ -3,15 +3,24 @@ const Schema = mongoose.Schema;
 const bcrypt = require("bcrypt");
 const findOrCreate = require("mongoose-findorcreate");
 
-
 const UserSchema = new Schema({
   name: { type: "String", required: true },
   lastName: { type: "String" },
-  email: { type: "String", required: true },
+  email: {
+    type: "String",
+    required: true,
+    unique: true, // Asegura que el email sea único
+    lowercase: true, // timestamps añade automáticamente createdAt y updatedAt
+  },
   password: { type: "String", required: true },
-  createdOn: { type: Date, default: new Date().getTime() }, //Si no funciona cambiar a createdOn: { type: Date, default: () => new Date() }
+  notes: [
+    {
+      _id: { type: mongoose.Schema.Types.ObjectId, ref: "Note" },
+    },
+  ],
+  createdOn: { type: Date, default: Date.now }, //Si no funciona cambiar a createdOn: { type: Date, default: () => new Date() }
   salt: { type: "String" },
-});
+}, { timestamps: true });
 
 UserSchema.methods.hash = (password, salt) => {
   return bcrypt.hash(password, salt);

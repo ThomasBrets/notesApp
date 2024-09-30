@@ -1,15 +1,19 @@
 const { validateToken } = require("../config/token");
 
 const validateUser = (req, res, next) => {
-  const token = req.cookies.token;
-  if (!token) return res.sendStatus(401);
+  const token = req.cookies.token; // Asegúrate de que la cookie contiene el token
+  if (!token) return res.sendStatus(401); // No autenticado
 
-  const { user } = validateToken(token);
-  if (!user) return res.sendStatus(401);
-
-  req.user = user;
-
-  next();
+  try {
+    const { user } = validateToken(token); // Decodifica el token
+    if (!user) return res.sendStatus(401); // Si no hay usuario en el token
+    req.user = user; // Añade el usuario a req.user
+    console.log("REQUSER", req.user);
+    
+    next();
+  } catch (error) {
+    return res.sendStatus(401); // Token inválido
+  }
 };
 
 module.exports = { validateUser };
