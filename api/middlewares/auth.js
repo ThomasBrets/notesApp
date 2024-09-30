@@ -8,7 +8,7 @@ const validateUser = (req, res, next) => {
     const { user } = validateToken(token); // Decodifica el token
     if (!user) return res.sendStatus(401); // Si no hay usuario en el token
     req.user = user; // Añade el usuario a req.user
-    console.log("REQUSER", req.user);
+    console.log("USUARIO VALIDADO", req.user);
     
     next();
   } catch (error) {

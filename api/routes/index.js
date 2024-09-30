@@ -6,6 +6,6 @@ const auth = require("./auth");
 const notes = require("./notes");
 
 router.use("/auth", auth);
-router.use("/notes", notes);
+router.use("/notes", validateUser, notes);
 
 module.exports = router;
