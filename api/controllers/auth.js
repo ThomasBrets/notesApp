@@ -10,7 +10,7 @@ class AuthController {
       : res.status(201).json(data);
   }
   static async loginUser(req, res) {
-    const { email, password } = req.body;
+    const { email, password, id } = req.body;
 
     User.findOne({ email })
       .then((user) => {
@@ -23,6 +23,7 @@ class AuthController {
           }
 
           const payload = {
+            id:user.id,
             email: user.email,
             password: user.password,
           };
