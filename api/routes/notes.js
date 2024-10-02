@@ -4,6 +4,7 @@ const NotesController = require("../controllers/notes")
 
 //!GET
 router.get("/all-notes", NotesController.allNotes)
+router.get("/:noteId", NotesController.getNote)
 
 //! POST
 router.post("/add-note", NotesController.addNote)

@@ -8,6 +8,13 @@ class NotesController {
       ? res.status(data.status || 500).json({ message: data })
       : res.status(201).json(data);
   }
+  static async getNote(req, res) {
+    const { error, data } = await NotesService.getNote(req.params.noteId);
+
+    return error
+      ? res.status(data.status || 500).json({ message: data })
+      : res.status(201).json(data);
+  }
   static async addNote(req, res) {
     const  user  = req.user;
     console.log("USERID", user.id);

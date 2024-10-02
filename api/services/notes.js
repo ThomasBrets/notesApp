@@ -13,6 +13,17 @@ class NotesService {
       return { error: true, data: error.message };
     }
   }
+  static async getNote(id) {
+    try {
+      const note = await Notes.findOne({ _id: id })
+        .populate("author")
+        .sort({ isPinned: -1 }); // Usar populate para obtener los datos del autor
+
+      return { error: false, data: note };
+    } catch (error) {
+      return { error: true, data: error.message };
+    }
+  }
   static async addNote(body, userId) {
     const { title, content, tags } = body; 
 
