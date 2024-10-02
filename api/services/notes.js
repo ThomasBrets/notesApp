@@ -2,9 +2,27 @@ const Notes = require("../models/notes");
 const User = require("../models/user");
 
 class NotesService {
-  static async addNote(body) {
+  static async allNotes() {
     try {
-      const note = await Notes.create(body);
+      const note = await Notes.find({})
+        .populate("author")
+        .sort({ isPinned: -1 }); // Usar populate para obtener los datos del autor
+
+      return { error: false, data: note };
+    } catch (error) {
+      return { error: true, data: error.message };
+    }
+  }
+  static async addNote(body, userId) {
+    const { title, content, tags } = body; 
+
+    try {
+      const note = await Notes.create({
+        title,
+        content,
+        tags: tags || [],   // Si no hay tags, inicialízalo como un array vacío
+        author: userId      // Asegúrate de que el userId se pase correctamente
+      });
 
       return { error: false, data: note };
     } catch (error) {
@@ -12,21 +30,30 @@ class NotesService {
     }
   }
   static async editNote(id, body) {
-    // const { title, content, tags, isPinned } = body;
+    const { title, content, tags, isPinned } = body;
 
     try {
       const note = await Notes.findByIdAndUpdate(
         id,
         {
           $set: {
-            title:body.title,
-            content:body.content,
-            tags:body.tags,
-            isPinned:body.isPinned,
+            title,
+            content,
+            tags,
+            isPinned,
           },
         },
         { new: true }
       );
+
+      return { error: false, data: note };
+    } catch (error) {
+      return { error: true, data: error.message };
+    }
+  }
+  static async deleteNote(id) {
+    try {
+      const note = await Notes.findByIdAndDelete(id);
 
       return { error: false, data: note };
     } catch (error) {
