@@ -11,6 +11,7 @@ router.post("/add-note", NotesController.addNote)
 
 //! PUT
 router.put("/edit-note/:noteId", NotesController.editNote)
+router.put("/edit-note-pinned/:noteId", NotesController.editNotePinned)
 
 //!DELETE
 router.delete("/delete-note/:noteId", NotesController.deleteNote)
