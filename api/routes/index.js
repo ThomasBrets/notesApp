@@ -4,8 +4,10 @@ const { validateUser } = require("../middlewares/auth");
 
 const auth = require("./auth");
 const notes = require("./notes");
+const users = require("./users");
 
 router.use("/auth", auth);
 router.use("/notes", validateUser, notes);
+router.use("/users", users)
 
 module.exports = router;

@@ -6,14 +6,14 @@ class NotesController {
 
     return error
       ? res.status(data.status || 500).json({ message: data })
-      : res.status(201).json(data);
+      : res.status(200).json(data);
   }
   static async getNote(req, res) {
     const { error, data } = await NotesService.getNote(req.params.noteId);
 
     return error
       ? res.status(data.status || 500).json({ message: data })
-      : res.status(201).json(data);
+      : res.status(200).json(data);
   }
   static async addNote(req, res) {
     const  user  = req.user;
@@ -27,6 +27,16 @@ class NotesController {
   }
   static async editNote(req, res) {
     const { error, data } = await NotesService.editNote(
+      req.params.noteId,
+      req.body
+    );
+
+    return error
+      ? res.status(data.status || 500).json({ message: data })
+      : res.status(201).json(data);
+  }
+  static async editNotePinned(req, res) {
+    const { error, data } = await NotesService.editNotePinned(
       req.params.noteId,
       req.body
     );

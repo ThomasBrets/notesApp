@@ -1,5 +1,5 @@
 const Notes = require("../models/notes");
-const User = require("../models/user");
+
 
 class NotesService {
   static async allNotes() {
@@ -51,6 +51,25 @@ class NotesService {
             title,
             content,
             tags,
+            isPinned,
+          },
+        },
+        { new: true }
+      );
+
+      return { error: false, data: note };
+    } catch (error) {
+      return { error: true, data: error.message };
+    }
+  }
+  static async editNotePinned(id, body) {
+    const { isPinned } = body;
+
+    try {
+      const note = await Notes.findByIdAndUpdate(
+        id,
+        {
+          $set: {
             isPinned,
           },
         },
