@@ -9,7 +9,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const onLogout = () => {
-    navigate("/login");
+    navigate("/auth/login");
   };
 
   const handleSearch = () => {};
