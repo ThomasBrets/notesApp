@@ -1,24 +1,22 @@
-// .env
 const dotenv = require("dotenv");
 dotenv.config();
 
-// require
 const express = require("express");
 const app = express();
 const cors = require("cors");
 const db = require("./config/db");
 const cookieParser = require('cookie-parser'); // Importar cookie-parser
-
-const routes = require("./routes")
-
-
+const routes = require("./routes");
 
 // Middlewares
 app.use(express.json());
 app.use(cookieParser()); // Usar cookie-parser para manejar cookies
+
+// Configurar CORS correctamente para permitir solicitudes del frontend
 app.use(
   cors({
-    origin: "*",
+    origin: "http://localhost:5173", // El origen del frontend
+    credentials: true, // Permitir el envío de cookies y autenticación entre orígenes
   })
 );
 
@@ -30,8 +28,7 @@ app.get("/", (req, res) => {
 });
 
 // Servidor
-const port = process.env.PORT || 3001;
-
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server on ${port}`);
 });
