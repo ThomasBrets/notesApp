@@ -1,12 +1,19 @@
 const UsersServices = require("../services/user");
 
 class UsersController {
-  static async getUser(req, res) {
-    const { error, data } = await UsersServices.getUser(req.params.userId);
+  static async getUserInfo(req, res) {
+    const { id } = req.user; // `req.user` proviene de validateUser
 
-    return error
-      ? res.status(data.status || 500).json({ message: data })
-      : res.status(200).json(data);
+    const { error, data } = await UsersServices.getUserInfo(id);
+
+    if (error) {
+      return res.status(500).json({ message: data });
+    }
+
+    // Excluir campos sensibles como la contraseña y salt
+    const { password, salt, ...userInfo } = data;
+
+    return res.status(200).json(userInfo);
   }
 }
 

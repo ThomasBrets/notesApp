@@ -1,15 +1,15 @@
 const User = require("../models/user");
 
 class UsersServices {
-  static async getUser(id) {
+  static async getUserInfo(id) {
     try {
-      const user = await User.findOne({ _id: id });
-      console.log("USERSERVICE", user);
-      
-
-      return {error: false, data: user} 
+      const user = await User.findById(id).select('-password -salt'); // Excluir campos sensibles
+      if (!user) {
+        return { error: true, data: "Usuario no encontrado" };
+      }
+      return { error: false, data: user };
     } catch (error) {
-        return {error: true, data: error.message}
+      return { error: true, data: error.message };
     }
   }
 }
