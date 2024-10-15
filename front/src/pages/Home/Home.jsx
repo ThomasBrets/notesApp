@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import NoteCards from "../../components/Cards/NoteCards";
 import { MdAdd } from "react-icons/md";
 import AddEditNotes from "./AddEditNotes";
 import Modal from "react-modal";
 import { IoMdClose } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
+// Axios
+import axiosInstance from "../../utils/axios";
 
 const Home = () => {
   const [openAddEditModal, setOpenAddEditModal] = useState({
@@ -12,6 +15,35 @@ const Home = () => {
     type: "add",
     data: null,
   });
+
+  // Get userInfo
+  const [userInfo, setUserInfo] = useState(null);
+  const navigate = useNavigate();
+
+   // Función para obtener la información del usuario logueado
+   const getUserInfo = async () => {
+    try {
+      // Llamada a la nueva ruta /get-user
+      const response = await axiosInstance.get('/users/get-user');
+      console.log("GET-RESP.DATA.DOC", response.data._doc);
+      
+      if (response.data && response.data._doc) {
+        setUserInfo(response.data._doc); // Guardar la info en el estado
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        localStorage.clear(); // Limpiar el localStorage si no está autorizado
+        navigate('/auth/login'); // Redirigir al login
+      } else {
+        console.error("Error al obtener la información del usuario:", error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    getUserInfo(); // Llamar a la función al montar el componente
+    return () => {};
+  }, []);
 
   return (
     <>
@@ -60,7 +92,6 @@ const Home = () => {
           }}
         />
       </Modal>
-      
     </>
   );
 };
