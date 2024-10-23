@@ -30,9 +30,9 @@ const Home = () => {
       if (response.data && response.data._doc) {
         setUserInfo(response.data._doc); // Guardar la info en el estado
       }
+      
     } catch (error) {
       if (error.response && error.response.status === 401) {
-        localStorage.clear(); // Limpiar el localStorage si no está autorizado
         navigate('/auth/login'); // Redirigir al login
       } else {
         console.error("Error al obtener la información del usuario:", error);
@@ -45,9 +45,10 @@ const Home = () => {
     return () => {};
   }, []);
 
+
   return (
     <>
-      <Navbar />
+      <Navbar userInfo={userInfo}/>
       <div className="container mx-auto">
         <div className="grid grid-cols-3 gap-4 mt-8">
           <NoteCards

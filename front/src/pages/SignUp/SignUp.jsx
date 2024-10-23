@@ -2,36 +2,57 @@ import React, { useState } from "react";
 // Components
 import Navbar from "../../components/Navbar";
 import PasswordInput from "../../components/Input/PasswordInput";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { validateEmail } from "../../utils/helper";
+import axiosInstance from "../../utils/axios";
 
 const SignUp = () => {
   const [name, setName] = useState("");
+  const [lastName, setlastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
 
+  const navigate = useNavigate();
+
   const handleSignUp = async (e) => {
     e.preventDefault();
 
-    if(!name) {
+    if (!name) {
       setError("Please enter your name");
-      return
+      return;
     }
 
-    if(!validateEmail(email)) {
+    if (!validateEmail(email)) {
       setError("Please enter a valid email adress");
-      return
+      return;
     }
 
-    if(!password) {
+    if (!password) {
       setError("Please enter the password");
-      return
+      return;
     }
 
-    setError("")
+    setError("");
 
     // SignUp API Call
+
+    try {
+      const response = await axiosInstance.post("/auth/register", {
+        name,
+        lastName,
+        email,
+        password,
+      });
+
+      console.log("Registration successful", response.data);
+
+      // Redirigir al login después de un registro exitoso
+      navigate("/auth/login");
+    } catch (error) {
+      console.error("Registration failed", error.response?.data || error.message);
+      setError(error.response?.data?.error || "Registration failed");
+    }
   };
 
   return (
@@ -52,6 +73,13 @@ const SignUp = () => {
             />
             <input
               type="text"
+              placeholder="LastName"
+              className="input-box "
+              value={lastName}
+              onChange={(e) => setlastName(e.target.value)}
+            />
+            <input
+              type="text"
               placeholder="Email"
               className="input-box "
               value={email}
@@ -61,8 +89,7 @@ const SignUp = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            
-            
+
             {error && <p className="text-red-500 text-xs pb-1">{error}</p>}
 
             <button type="submit" className="btn-primary">

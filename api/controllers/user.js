@@ -6,12 +6,14 @@ class UsersController {
 
     const { error, data } = await UsersServices.getUserInfo(id);
 
+
     if (error) {
-      return res.status(500).json({ message: data });
+      return res.status(500).json({ message: data._doc });
     }
 
     // Excluir campos sensibles como la contraseña y salt
     const { password, salt, ...userInfo } = data;
+    
 
     return res.status(200).json(userInfo);
   }
