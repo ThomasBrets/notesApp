@@ -1,8 +1,8 @@
 const NotesService = require("../services/notes");
 
 class NotesController {
-  static async allNotes(req, res) {
-    const { error, data } = await NotesService.allNotes();
+  static async getAllNotes(req, res) {
+    const { error, data } = await NotesService.getAllNotes();
 
     return error
       ? res.status(data.status || 500).json({ message: data })

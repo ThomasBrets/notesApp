@@ -3,7 +3,7 @@ const router = express.Router()
 const NotesController = require("../controllers/notes")
 
 //!GET
-router.get("/all-notes", NotesController.allNotes)
+router.get("/all-notes", NotesController.getAllNotes)
 router.get("/:noteId", NotesController.getNote)
 
 //! POST

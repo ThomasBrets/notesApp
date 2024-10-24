@@ -46,7 +46,7 @@ const SignUp = () => {
       });
 
       console.log("Registration successful", response.data);
-
+      
       // Redirigir al login después de un registro exitoso
       navigate("/auth/login");
     } catch (error) {

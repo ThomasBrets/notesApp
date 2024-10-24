@@ -16,10 +16,11 @@ const Home = () => {
     data: null,
   });
 
-  // Get userInfo
+  const [allNotes, setAllNotes] = useState([])
   const [userInfo, setUserInfo] = useState(null);
   const navigate = useNavigate();
-
+    
+  // Get userInfo
    // Función para obtener la información del usuario logueado
    const getUserInfo = async () => {
     try {
@@ -40,7 +41,24 @@ const Home = () => {
     }
   };
 
+  // Get All Notes
+  const getAllNotes = async () => {
+
+    try {
+      const response = await axiosInstance.get("/notes/all-notes")
+      console.log("ALLNOTES", response.data);
+      
+      
+      if (response.data && response.data) {
+        setAllNotes(response.data); // Guardar la info en el estado
+      }
+    } catch (error) {
+      console.error("Error inesperado:", error);
+    }
+  }
+
   useEffect(() => {
+    getAllNotes()
     getUserInfo(); // Llamar a la función al montar el componente
     return () => {};
   }, []);
@@ -51,16 +69,20 @@ const Home = () => {
       <Navbar userInfo={userInfo}/>
       <div className="container mx-auto">
         <div className="grid grid-cols-3 gap-4 mt-8">
-          <NoteCards
-            title="Inglés el 8 de julio"
-            date="2 de Julio"
-            content="Inglés el 8 de julio"
-            tags="#Meeting"
-            isPinned={true}
-            onEdit={() => {}}
-            onDelete={() => {}}
-            onPinNote={() => {}}
-          />
+          {allNotes.map((note, i) => (
+            <NoteCards
+            key={note._id}
+              title={note.title}
+              date={note.date}
+              content={note.content}
+              tags={note.tags}
+              isPinned={true}
+              onEdit={() => {}}
+              onDelete={() => {}}
+              onPinNote={() => {}}
+            />
+
+          ))}
         </div>
       </div>
 
