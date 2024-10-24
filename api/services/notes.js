@@ -2,13 +2,13 @@ const Notes = require("../models/notes");
 
 
 class NotesService {
-  static async allNotes() {
+  static async getAllNotes() {
     try {
-      const note = await Notes.find({})
+      const notes = await Notes.find({})
         .populate("author")
         .sort({ isPinned: -1 }); // Usar populate para obtener los datos del autor
 
-      return { error: false, data: note };
+      return { error: false, data: notes };
     } catch (error) {
       return { error: true, data: error.message };
     }

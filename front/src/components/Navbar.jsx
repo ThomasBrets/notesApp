@@ -2,14 +2,20 @@ import React, { useState } from "react";
 import ProfileInfo from "../components/Cards/ProfileInfo";
 import SearchBar from "../components/SearchBar/SearchBar";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../utils/axios";
 
-const Navbar = () => {
+const Navbar = ({ userInfo }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const navigate = useNavigate();
 
-  const onLogout = () => {
-    navigate("/auth/login");
+  const onLogout = async () => {
+    try {
+      await axiosInstance.post("/auth/logout"); // Llamada al backend para hacer logout y eliminar la cookie
+      navigate("/auth/login"); // Redirigir al login
+    } catch (error) {
+      console.error("Error al hacer logout:", error);
+    }
   };
 
   const handleSearch = () => {};
@@ -31,7 +37,8 @@ const Navbar = () => {
         onClearSearch={onClearSearch}
       />
 
-      <ProfileInfo onLogout={onLogout} />
+      {/* Renderizar ProfileInfo solo si userInfo existe (es decir, si el usuario está logueado) */}
+      {userInfo && <ProfileInfo userInfo={userInfo} onLogout={onLogout} />}
     </div>
   );
 };
