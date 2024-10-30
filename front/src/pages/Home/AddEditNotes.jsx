@@ -1,24 +1,53 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import { IoMdClose } from "react-icons/io";
 import TagInput from "../../components/Input/TagInput";
+import axiosInstance from "../../utils/axios";
+import { useNavigate } from "react-router-dom";
 
-const AddEditNotes = ({onClose, noteData, setOpenAddEditModal, }) => {
+const AddEditNotes = ({
+  onClose,
+  type,
+  noteData,
+  setOpenAddEditModal,
+  getAllNotes,
+  addNoteToState
+}) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [tags, setTags] = useState([]);
   const [error, setError] = useState(null);
 
-  // AddNote
-  const AddNewNote = async () => {
+  const navigate = useNavigate();
 
-  }
+  // AddNote
+  const AddNote = async () => {
+    try {
+      const response = await axiosInstance.post("/notes/add-note", {
+        title,
+        content,
+        tags,
+      });
+
+      if (response.data && response.data) {
+        getAllNotes()
+      }
+
+      console.log("addNote successful", response.data);
+
+      // Opcionalmente, redirige a otra página tras el login exitoso
+      // navigate("/"); // Puedes cambiar la ruta según sea necesario
+    } catch (error) {
+      console.error("Add note failed", error.response?.data || error.message);
+      setError(error.response?.data?.error || "Add note failed");
+    }
+  };
 
   // Edit Note
-  const EditNota = async () => {
+  const EditNota = async () => {};
 
-  }
+  const handleAddNote = async (e) => {
+    e.preventDefault();
 
-  const handleAddNote = () => {
     if (!title) {
       setError("Escriba un titulo por favor");
       return;
@@ -28,14 +57,21 @@ const AddEditNotes = ({onClose, noteData, setOpenAddEditModal, }) => {
       setError("Escribe un contenido por favor");
       return;
     }
-    setError("")
+    setError("");
 
-    if(type === "edit"){
-      editNote()
-    }else{
-      addNewNote()
+    if (type === "edit") {
+      editNote();
+    } else {
+       AddNote();
     }
+    onClose();
   };
+
+
+  useEffect(() => {
+    getAllNotes();
+    return () => {};
+  }, []);
 
   return (
     <div className="relative">
@@ -73,8 +109,8 @@ const AddEditNotes = ({onClose, noteData, setOpenAddEditModal, }) => {
         <label className="input-label">TAGS</label>
         <TagInput tags={tags} setTags={setTags} />
       </div>
-      
-          {error && <p className="text-red-500 text-xs pt-4">{error}</p>}
+
+      {error && <p className="text-red-500 text-xs pt-4">{error}</p>}
 
       <button
         className="btn-primary font-medium mt-5 p-3"
