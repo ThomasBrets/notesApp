@@ -6,6 +6,8 @@ import AddEditNotes from "./AddEditNotes";
 import Modal from "react-modal";
 import { IoMdClose } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
+
+
 // Axios
 import axiosInstance from "../../utils/axios";
 
@@ -16,25 +18,24 @@ const Home = () => {
     data: null,
   });
 
-  const [allNotes, setAllNotes] = useState([])
+  const [allNotes, setAllNotes] = useState([]);
   const [userInfo, setUserInfo] = useState(null);
   const navigate = useNavigate();
-    
+
   // Get userInfo
-   // Función para obtener la información del usuario logueado
-   const getUserInfo = async () => {
+  // Función para obtener la información del usuario logueado
+  const getUserInfo = async () => {
     try {
       // Llamada a la nueva ruta /get-user
-      const response = await axiosInstance.get('/users/get-user');
+      const response = await axiosInstance.get("/users/get-user");
       console.log("GET-RESP.DATA.DOC", response.data._doc);
-      
+
       if (response.data && response.data._doc) {
         setUserInfo(response.data._doc); // Guardar la info en el estado
       }
-      
     } catch (error) {
       if (error.response && error.response.status === 401) {
-        navigate('/auth/login'); // Redirigir al login
+        navigate("/auth/login"); // Redirigir al login
       } else {
         console.error("Error al obtener la información del usuario:", error);
       }
@@ -43,45 +44,42 @@ const Home = () => {
 
   // Get All Notes
   const getAllNotes = async () => {
-
     try {
-      const response = await axiosInstance.get("/notes/all-notes")
+      const response = await axiosInstance.get("/notes/all-notes");
       console.log("ALLNOTES", response.data);
-      
-      
+
       if (response.data && response.data) {
         setAllNotes(response.data); // Guardar la info en el estado
       }
     } catch (error) {
       console.error("Error inesperado:", error);
     }
-  }
+  };
 
   useEffect(() => {
-    getAllNotes()
     getUserInfo(); // Llamar a la función al montar el componente
+    getAllNotes();
     return () => {};
   }, []);
 
 
   return (
     <>
-      <Navbar userInfo={userInfo}/>
+      <Navbar userInfo={userInfo} />
       <div className="container mx-auto">
         <div className="grid grid-cols-3 gap-4 mt-8">
           {allNotes.map((note, i) => (
             <NoteCards
-            key={note._id}
+              key={note._id}
               title={note.title}
-              date={note.date}
+              date={note.createdOn}
               content={note.content}
               tags={note.tags}
-              isPinned={true}
+              isPinned={note.isPinned}
               onEdit={() => {}}
               onDelete={() => {}}
               onPinNote={() => {}}
             />
-
           ))}
         </div>
       </div>
@@ -110,9 +108,8 @@ const Home = () => {
           openAddEditModal={openAddEditModal}
           type={openAddEditModal.type}
           noteData={openAddEditModal.data}
-          onClose={() => {
-            setOpenAddEditModal({ isShown: false, type: "add", data: null });
-          }}
+          onClose={() => setOpenAddEditModal({ isShown: false, type: "add", data: null })}
+          getAllNotes={getAllNotes}
         />
       </Modal>
     </>
