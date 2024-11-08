@@ -22,6 +22,11 @@ const Home = () => {
   const [userInfo, setUserInfo] = useState(null);
   const navigate = useNavigate();
 
+  const handleEdit = (noteDetails) => {
+    setOpenAddEditModal({ isShown: true, data: noteDetails, type: "edit"})
+  }
+
+
   // Get userInfo
   // Función para obtener la información del usuario logueado
   const getUserInfo = async () => {
@@ -67,7 +72,7 @@ const Home = () => {
     <>
       <Navbar userInfo={userInfo} />
       <div className="container mx-auto">
-        <div className="grid grid-cols-3 gap-4 mt-8">
+        <div className="grid grid-cols-3 gap-4 mt-8 mx-2">
           {allNotes.map((note, i) => (
             <NoteCards
               key={note._id}
@@ -76,7 +81,7 @@ const Home = () => {
               content={note.content}
               tags={note.tags}
               isPinned={note.isPinned}
-              onEdit={() => {}}
+              onEdit={() => handleEdit(note)}
               onDelete={() => {}}
               onPinNote={() => {}}
             />
@@ -85,7 +90,7 @@ const Home = () => {
       </div>
 
       <button
-        className="w-16 h-16 flex items-center justify-center rounded-2xl bg-primary hover:bg-blue-600 absolute right-10 bottom-10"
+        className="w-16 h-16 flex items-center justify-center rounded-2xl bg-primary hover:bg-blue-600 right-10 bottom-10 fixed"
         onClick={() => {
           setOpenAddEditModal({ isShown: true, type: "add", data: null });
         }}
