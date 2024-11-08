@@ -19,6 +19,15 @@ const AddEditNotes = ({
 
   const navigate = useNavigate();
 
+    // Cargar datos de la nota en el formulario si el tipo es "edit"
+    useEffect(() => {
+      if (type === "edit" && noteData) {
+        setTitle(noteData.title || "");
+        setContent(noteData.content || "");
+        setTags(noteData.tags || []);
+      }
+    }, [type, noteData]);
+
   // AddNote
   const AddNote = async () => {
     try {
@@ -43,7 +52,22 @@ const AddEditNotes = ({
   };
 
   // Edit Note
-  const EditNota = async () => {};
+  const EditNote = async () => {
+    try {
+      const response = await axiosInstance.put(`/notes/edit-note/${noteData._id}`, {
+        title,
+        content,
+        tags,
+      });
+
+      if (response.data) {
+        getAllNotes(); // Actualiza la lista de notas en el frontend
+      }
+    } catch (error) {
+      console.error("Edit note failed", error.response?.data || error.message);
+      setError("Edit note failed");
+    }
+  };
 
   const handleAddNote = async (e) => {
     e.preventDefault();
@@ -60,7 +84,7 @@ const AddEditNotes = ({
     setError("");
 
     if (type === "edit") {
-      editNote();
+      EditNote();
     } else {
        AddNote();
     }
@@ -68,10 +92,7 @@ const AddEditNotes = ({
   };
 
 
-  useEffect(() => {
-    getAllNotes();
-    return () => {};
-  }, []);
+
 
   return (
     <div className="relative">
@@ -116,7 +137,7 @@ const AddEditNotes = ({
         className="btn-primary font-medium mt-5 p-3"
         onClick={handleAddNote}
       >
-        ADD
+       {type === "edit" ? "UPDATE" : "ADD"}
       </button>
     </div>
   );
