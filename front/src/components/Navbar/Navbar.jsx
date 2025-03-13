@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import ProfileInfo from "../components/Cards/ProfileInfo";
-import SearchBar from "../components/SearchBar/SearchBar";
+import ProfileInfo from "../Cards/ProfileInfo";
+import SearchBar from "../SearchBar/SearchBar";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../utils/axios";
+import axiosInstance from "../../utils/axios";
 
 const Navbar = ({ userInfo }) => {
   const [searchQuery, setSearchQuery] = useState("");
