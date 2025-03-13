@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "../../components/Navbar";
+import Navbar from "../../components/Navbar/Navbar";
 import NoteCards from "../../components/Cards/NoteCards";
 import { MdAdd } from "react-icons/md";
 import AddEditNotes from "./AddEditNotes";

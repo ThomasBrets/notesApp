@@ -2,7 +2,7 @@ import React, { useState } from "react";
 // react-router
 import { Link, useNavigate } from "react-router-dom";
 // components
-import Navbar from "../../components/Navbar";
+import Navbar from "../../components/Navbar/Navbar.jsx";
 import PasswordInput from "../../components/Input/PasswordInput";
 // Utils
 import { validateEmail } from "../../utils/helper";

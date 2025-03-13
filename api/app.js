@@ -15,7 +15,7 @@ app.use(cookieParser()); // Usar cookie-parser para manejar cookies
 // Configurar CORS correctamente para permitir solicitudes del frontend
 app.use(
   cors({
-    origin: "http://localhost:5174", // El origen del frontend
+    origin: "http://localhost:5173", // El origen del frontend
     credentials: true, // Permitir el envío de cookies y autenticación entre orígenes
   })
 );
