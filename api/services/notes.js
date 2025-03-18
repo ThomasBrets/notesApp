@@ -85,7 +85,25 @@ class NotesService {
     try {
       const note = await Notes.findByIdAndDelete(id);
 
+      
+
       return { error: false, data: note };
+    } catch (error) {
+      return { error: true, data: error.message };
+    }
+  }
+
+  static async SearchNote(query, userId) {
+    try {
+      const notes = await Notes.find({
+        author: userId,
+        $or: [
+          {title: {$regex: new RegExp(query, "i")}},
+          {content: {$regex: new RegExp(query, "i")}},
+        ]
+      })
+
+      return { error: false, data: notes};
     } catch (error) {
       return { error: true, data: error.message };
     }

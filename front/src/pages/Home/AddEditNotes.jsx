@@ -10,7 +10,8 @@ const AddEditNotes = ({
   noteData,
   setOpenAddEditModal,
   getAllNotes,
-  addNoteToState
+  addNoteToState,
+  showToastMessage
 }) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -38,6 +39,7 @@ const AddEditNotes = ({
       });
 
       if (response.data && response.data) {
+        showToastMessage("Note added Succefully")
         getAllNotes()
       }
 
@@ -61,6 +63,7 @@ const AddEditNotes = ({
       });
 
       if (response.data) {
+        showToastMessage("Note updated Succefully")
         getAllNotes(); // Actualiza la lista de notas en el frontend
       }
     } catch (error) {
@@ -69,6 +72,8 @@ const AddEditNotes = ({
     }
   };
 
+  
+ 
   const handleAddNote = async (e) => {
     e.preventDefault();
 

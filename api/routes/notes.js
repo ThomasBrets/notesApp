@@ -1,6 +1,10 @@
 const express = require('express')
 const router = express.Router()
 const NotesController = require("../controllers/notes")
+const { validateUser } = require('../middlewares/auth')
+
+//?Search
+router.get("/search-notes", validateUser, NotesController.SearchNote)
 
 //!GET
 router.get("/all-notes", NotesController.getAllNotes)
