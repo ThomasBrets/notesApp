@@ -8,8 +8,7 @@ import { MdAdd } from "react-icons/md";
 import Modal from "react-modal";
 import { IoMdClose } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
-import AddNote from "../../assets/images/AddNote.svg"
-
+import AddNote from "../../assets/images/AddNote.svg";
 
 // Axios
 import axiosInstance from "../../utils/axios";
@@ -25,31 +24,32 @@ const Home = () => {
     isShown: false,
     message: "",
     type: "add",
-  })
+  });
 
   const [allNotes, setAllNotes] = useState([]);
   const [userInfo, setUserInfo] = useState(null);
+  const [isSearch, setIsSearch] = useState(false);
+
   const navigate = useNavigate();
 
   const handleEdit = (noteDetails) => {
-    setOpenAddEditModal({ isShown: true, data: noteDetails, type: "edit"})
-  }
+    setOpenAddEditModal({ isShown: true, data: noteDetails, type: "edit" });
+  };
 
   const showToastMessage = (message, type) => {
     setShowToastMsg({
       isShown: true,
       message,
-      type
-    })
-  }
+      type,
+    });
+  };
 
   const handleCloseToast = () => {
     setShowToastMsg({
       isShown: false,
       message: "",
-    })
-  }
-
+    });
+  };
 
   // Get userInfo
   // Función para obtener la información del usuario logueado
@@ -86,19 +86,39 @@ const Home = () => {
   };
 
   // Delete Note
-const deleteNote = async (noteId) => {
-  try {
-    const response = await axiosInstance.delete(`/notes/delete-note/${noteId}`);
+  const deleteNote = async (noteId) => {
+    try {
+      const response = await axiosInstance.delete(
+        `/notes/delete-note/${noteId}`
+      );
 
-    if (response.data) {
-      showToastMessage("Note deleted successfully", "delete");
-      getAllNotes(); // Actualiza la lista de notas en el frontend
+      if (response.data) {
+        showToastMessage("Note deleted successfully", "delete");
+        getAllNotes(); // Actualiza la lista de notas en el frontend
+      }
+    } catch (error) {
+      console.error(
+        "Delete note failed",
+        error.response?.data || error.message
+      );
+      setError("Delete note failed");
     }
-  } catch (error) {
-    console.error("Delete note failed", error.response?.data || error.message);
-    setError("Delete note failed");
-  }
-};
+  };
+
+  const onSearch = async (query) => {
+    try {
+      const response = await axiosInstance.get(
+        `/notes/search-notes?query=${query}`
+      );
+
+      if (response.data) {
+        setAllNotes(response.data); // Actualizar la lista de notas con los resultados de búsqueda
+        setIsSearch(true); // Marcar que estamos en modo búsqueda
+      }
+    } catch (error) {
+      console.error("Error al buscar notas:", error);
+    }
+  };
 
   useEffect(() => {
     getUserInfo(); // Llamar a la función al montar el componente
@@ -106,26 +126,32 @@ const deleteNote = async (noteId) => {
     return () => {};
   }, []);
 
-
   return (
     <>
-      <Navbar userInfo={userInfo} />
+      <Navbar userInfo={userInfo} onSearch={onSearch}/>
       <div className="container mx-auto">
-        {allNotes.length > 0 ? <div className="grid grid-cols-3 gap-4 mt-8 mx-2">
-          {allNotes.map((note, i) => (
-            <NoteCards
-              key={note._id}
-              title={note.title}
-              date={note.createdOn}
-              content={note.content}
-              tags={note.tags}
-              isPinned={note.isPinned}
-              onEdit={() => handleEdit(note)}
-              onDelete={() => deleteNote(note._id)}
-              onPinNote={() => {}}
-            />
-          ))}
-        </div> : <EmptyCard imgSrc={AddNote}  message={`Start creating your first note! Click the "Add" button to jot down your thoughts, ideas and reminders. Leṭ's get started!`}/>}
+        {allNotes.length > 0 ? (
+          <div className="grid grid-cols-3 gap-4 mt-8 mx-2">
+            {allNotes.map((note, i) => (
+              <NoteCards
+                key={note._id}
+                title={note.title}
+                date={note.createdOn}
+                content={note.content}
+                tags={note.tags}
+                isPinned={note.isPinned}
+                onEdit={() => handleEdit(note)}
+                onDelete={() => deleteNote(note._id)}
+                onPinNote={() => {}}
+              />
+            ))}
+          </div>
+        ) : (
+          <EmptyCard
+            imgSrc={AddNote}
+            message={`Start creating your first note! Click the "Add" button to jot down your thoughts, ideas and reminders. Leṭ's get started!`}
+          />
+        )}
       </div>
 
       <button
@@ -152,19 +178,20 @@ const deleteNote = async (noteId) => {
           openAddEditModal={openAddEditModal}
           type={openAddEditModal.type}
           noteData={openAddEditModal.data}
-          onClose={() => setOpenAddEditModal({ isShown: false, type: "add", data: null })}
+          onClose={() =>
+            setOpenAddEditModal({ isShown: false, type: "add", data: null })
+          }
           getAllNotes={getAllNotes}
           showToastMessage={showToastMessage}
         />
       </Modal>
 
-        <Toast 
-            isShown={showToastMsg.isShown}
-            message={showToastMsg.message}
-            type={showToastMsg.type}
-            onClose={handleCloseToast}
-        />
-
+      <Toast
+        isShown={showToastMsg.isShown}
+        message={showToastMsg.message}
+        type={showToastMsg.type}
+        onClose={handleCloseToast}
+      />
     </>
   );
 };
