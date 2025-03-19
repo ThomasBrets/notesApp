@@ -112,12 +112,33 @@ const Home = () => {
       );
 
       if (response.data) {
-        setAllNotes(response.data); // Actualizar la lista de notas con los resultados de búsqueda
         setIsSearch(true); // Marcar que estamos en modo búsqueda
+        setAllNotes(response.data); // Actualizar la lista de notas con los resultados de búsqueda
       }
     } catch (error) {
       console.error("Error al buscar notas:", error);
     }
+  };
+
+  const updateIsPinned = async (noteId, isPinned) => {
+    try {
+      const response = await axiosInstance.put(`/notes/edit-note-pinned/${noteId}`, {
+        isPinned: !isPinned, // Alterna el estado
+      });
+  
+      if (response.data) {
+        showToastMessage("Note pin status updated", "update");
+        getAllNotes(); // Actualiza la lista de notas en el frontend
+      }
+    } catch (error) {
+      console.error("Failed to update pinned note", error.response?.data || error.message);
+    }
+  };
+
+
+  const handleClearSearch = () => {
+    setIsSearch(false);
+    getAllNotes();
   };
 
   useEffect(() => {
@@ -128,7 +149,11 @@ const Home = () => {
 
   return (
     <>
-      <Navbar userInfo={userInfo} onSearch={onSearch}/>
+      <Navbar
+        userInfo={userInfo}
+        onSearch={onSearch}
+        handleClearSearch={handleClearSearch}
+      />
       <div className="container mx-auto">
         {allNotes.length > 0 ? (
           <div className="grid grid-cols-3 gap-4 mt-8 mx-2">
@@ -142,14 +167,18 @@ const Home = () => {
                 isPinned={note.isPinned}
                 onEdit={() => handleEdit(note)}
                 onDelete={() => deleteNote(note._id)}
-                onPinNote={() => {}}
+                onPinNote={() => updateIsPinned(note._id, note.isPinned)} // Llamada a la función
               />
             ))}
           </div>
         ) : (
           <EmptyCard
             imgSrc={AddNote}
-            message={`Start creating your first note! Click the "Add" button to jot down your thoughts, ideas and reminders. Leṭ's get started!`}
+            message={
+              isSearch
+                ? `Oops! No notes found matching your search.`
+                : `Start creating your first note! Click the "Add" button to jot down your thoughts, ideas and reminders. Leṭ's get started!`
+            }
           />
         )}
       </div>

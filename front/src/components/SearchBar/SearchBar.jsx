@@ -1,15 +1,20 @@
 import React from "react";
+import { useEffect } from "react";
 
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
 
 const SearchBar = ({ value, onChange, handleSearch, onClearSearch }) => {
 
-  const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
-      handleSearch(); // Ejecuta la búsqueda al presionar Enter
-    }
-  };
+    // Ejecuta la búsqueda en tiempo real cuando cambia el input
+    useEffect(() => {
+      if (value.trim() === "") {
+        onClearSearch(); // Si está vacío, mostrar todas las notas
+      } else {
+        handleSearch(); // Si hay texto, hacer la búsqueda
+      }
+    }, [value]); // Se ejecuta cada vez que `value` cambia
+
   
   return (
     <div className="w-80 flex items-center bg-slate-100 px-4 rounded-md">
@@ -18,8 +23,7 @@ const SearchBar = ({ value, onChange, handleSearch, onClearSearch }) => {
         placeholder="Search notes"
         className="text-xs w-full bg-transparent  py-[11px] outline-none"
         value={value}
-        onChange={onChange}
-        handleKeyDown={handleKeyDown}
+        onChange={(e) => onChange(e)} // Se actualiza el estado en Navbar.jsx
       />
 
       {value && (<IoMdClose
@@ -30,7 +34,6 @@ const SearchBar = ({ value, onChange, handleSearch, onClearSearch }) => {
       <FaMagnifyingGlass
         className="text-slate-400 cursor-pointer hover:text-black"
         onClick={handleSearch}
-        handleKeyDown={handleKeyDown}
       />
     </div>
   );
