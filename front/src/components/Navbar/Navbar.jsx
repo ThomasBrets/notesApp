@@ -20,9 +20,9 @@ const Navbar = ({ userInfo, onSearch, handleClearSearch }) => {
 
   const handleSearch = () => {
     if (searchQuery.trim() === "") {
-      onSearch("")
-    }else{
-      onSearch(searchQuery)
+      onSearch("");
+    } else {
+      onSearch(searchQuery);
     }
   };
 
@@ -35,14 +35,16 @@ const Navbar = ({ userInfo, onSearch, handleClearSearch }) => {
     <div className="bg-white drop-shadow px-6 py-2 flex items-center justify-between">
       <h2 className="text-xl font-medium text-black py-2">Notes</h2>
 
-      <SearchBar
-        value={searchQuery}
-        onChange={({ target }) => {
-          setSearchQuery(target.value);
-        }}
-        handleSearch={handleSearch}
-        onClearSearch={onClearSearch}
-      />
+      {userInfo && (
+        <SearchBar
+          value={searchQuery}
+          onChange={({ target }) => {
+            setSearchQuery(target.value);
+            handleSearch(target.value); // Búsqueda en tiempo real
+          }}
+          onClearSearch={onClearSearch}
+        />
+      )}
 
       {/* Renderizar ProfileInfo solo si userInfo existe (es decir, si el usuario está logueado) */}
       {userInfo && <ProfileInfo userInfo={userInfo} onLogout={onLogout} />}

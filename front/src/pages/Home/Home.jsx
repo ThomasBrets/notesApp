@@ -149,11 +149,7 @@ const Home = () => {
 
   return (
     <>
-      <Navbar
-        userInfo={userInfo}
-        onSearch={onSearch}
-        handleClearSearch={handleClearSearch}
-      />
+      <Navbar userInfo={userInfo} onSearch={userInfo ? onSearch : () => {}}/>
       <div className="container mx-auto">
         {allNotes.length > 0 ? (
           <div className="grid grid-cols-3 gap-4 mt-8 mx-2">
