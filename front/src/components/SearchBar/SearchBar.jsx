@@ -10,6 +10,7 @@ const SearchBar = ({ value, onChange, handleSearch, onClearSearch }) => {
     }
   };
 
+  
   return (
     <div className="w-80 flex items-center bg-slate-100 px-4 rounded-md">
       <input
