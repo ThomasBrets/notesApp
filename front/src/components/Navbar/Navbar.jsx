@@ -4,7 +4,7 @@ import SearchBar from "../SearchBar/SearchBar";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axios";
 
-const Navbar = ({ userInfo, onSearch }) => {
+const Navbar = ({ userInfo, onSearch, handleClearSearch }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const navigate = useNavigate();
@@ -28,7 +28,7 @@ const Navbar = ({ userInfo, onSearch }) => {
 
   const onClearSearch = () => {
     setSearchQuery("");
-    onSearch(""); // Al limpiar la búsqueda, mostrar todas las notas
+    handleClearSearch() // Al limpiar la búsqueda, mostrar todas las notas
   };
 
   return (

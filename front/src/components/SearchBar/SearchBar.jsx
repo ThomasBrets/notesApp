@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect } from "react";
 
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
@@ -34,7 +35,6 @@ const SearchBar = ({ value, onChange, handleSearch, onClearSearch }) => {
       <FaMagnifyingGlass
         className="text-slate-400 cursor-pointer hover:text-black"
         onClick={handleSearch}
-        handleKeyDown={handleKeyDown}
       />
     </div>
   );
